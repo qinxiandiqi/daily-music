@@ -1,0 +1,68 @@
+/* 中文字体支持 - 确保所有中文字符正确显示 */
+
+/* 基础中文字体栈 */
+.chinese-font-stack {
+  font-family: 
+    "Noto Sans SC",        /* Google Fonts 中文 */
+    "PingFang SC",         /* macOS 中文 */
+    "Hiragino Sans GB",    /* macOS 中文 */
+    "Microsoft YaHei",     /* Windows 中文 */
+    "微软雅黑",             /* Windows 中文 */
+    "Source Han Sans SC",  /* Adobe 中文字体 */
+    "WenQuanYi Micro Hei", /* Linux 中文 */
+    "Source Han Sans CN",   /* 备用中文字体 */
+    "Noto CJK SC",          /* 备用中文字体 */
+    "SimSun",              /* 宋体 - 备用 */
+    "NSimSun",             /* 新宋体 - 备用 */
+    sans-serif;
+}
+
+/* 强化中文渲染 */
+.cjk-text {
+  font-family: "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Source Han Sans SC", "WenQuanYi Micro Hei", sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-feature-settings: "palt" 1;
+  -moz-font-feature-settings: "palt" 1;
+  font-feature-settings: "palt" 1;
+}
+
+/* 确保标点符号正确显示 */
+.punctuation-fix {
+  /* text-spacing: ideograph-alpha; */  /* 移除不支持的CSS属性 */
+  /* text-spacing: ideograph; */
+  letter-spacing: 0.01em;
+}
+
+/* 修复数字和中文混排 */
+.mixed-text-cn {
+  font-feature-settings: "tnum" 1, "lnum" 0;
+}
+
+/* 修复中文行高问题 */
+.chinese-line-height {
+  line-height: 1.6;
+}
+
+/* 强制所有文本使用中文字体 */
+* {
+  font-family: "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Source Han Sans SC", "WenQuanYi Micro Hei", sans-serif;
+}
+
+/* Web字体预加载 */
+@font-face {
+  font-family: 'Noto Sans SC';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Noto Sans SC Regular'), 
+       url('https://fonts.gstatic.com/s/notosanssc/v36/k3kCo84MPvpLmixcA63oeAL7Iqp5IZJF9bmaG9_z7GZj.woff2') format('woff2');
+  unicode-range: U+4E00-U+9FFF, U+3400-U+4DBF, U+20000-U+2A6DF, U+2A700-U+2B73F, U+2B740-U+2B81F, U+2B820-U+2CEAF, U+F900-U+FAFF, U+2F800-U+2FA1F;
+}
+
+@font-face {
+  font-family: 'Noto Sans SC';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Noto Sans SC Medium'), 
+       url('https://fonts.gstatic.com/s/notosanssc/v36/k3kCo84MPvpLmixcA63oeAL7Iqp5IZJF9bmaP5_z7GZj.woff2') format('woff2');
+  unicode-range: U+4E00-U+9FFF, U+3400-U+4DBF, U+20000-U+2A6DF, U+2A700-U+2B73F, U+2B740-U+2B81F, U+2B820-U+2CEAF, U+F900-U+FAFF, U+2F800-U+2FA1F;
+}
