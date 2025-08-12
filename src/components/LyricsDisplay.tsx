@@ -24,7 +24,7 @@ export const LyricsDisplay: React.FC<LyricsDisplayProps> = ({
         {lyrics.map((line, index) => (
           <div
             key={index}
-            className={`text-center px-4 py-1 transition-all duration-300 chinese-font-stack ${
+            className={`text-center px-4 py-1 transition-all duration-300 ${
               index === currentLineIndex
                 ? 'text-lg font-bold text-white drop-shadow-lg scale-105'
                 : index >= Math.max(0, currentLineIndex - 1) && index <= Math.min(totalLines - 1, currentLineIndex + 1)

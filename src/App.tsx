@@ -4,7 +4,6 @@ import { VinylPlayer } from './components/VinylPlayer';
 import { LyricsDisplay } from './components/LyricsDisplay';
 import { PlayerControls } from './components/PlayerControls';
 import type { Song } from './types/music';
-import './styles/chinese-fonts.css';
 
 // 示例歌曲数据
 const sampleSongs: Song[] = [
@@ -95,7 +94,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-900 via-blue-900 to-indigo-900 flex flex-col items-center justify-center p-4 text-white chinese-font-stack cjk-text punctuation-fix chinese-line-height">
+    <div className="min-h-screen bg-gradient-to-b from-purple-900 via-blue-900 to-indigo-900 flex flex-col items-center justify-center p-4 text-white">
       {/* 隐藏的音频元素 */}
       <audio 
         ref={audioRef} 
@@ -126,19 +125,19 @@ export const App: React.FC = () => {
         <div className="text-center w-full px-4">
           {currentSong ? (
             <>
-              <h1 className="text-2xl font-bold text-white mb-1 drop-shadow-lg chinese-font-stack">
+              <h1 className="text-2xl font-bold text-white mb-1 drop-shadow-lg">
                 {currentSong.title}
               </h1>
-              <p className="text-lg text-gray-300 font-medium chinese-font-stack">
+              <p className="text-lg text-gray-300 font-medium">
                 {currentSong.artist}
               </p>
             </>
           ) : (
             <div className="text-center">
-              <h1 className="text-2xl font-bold text-gray-400 mb-1 chinese-font-stack">
+              <h1 className="text-2xl font-bold text-gray-400 mb-1">
                 选择一首歌曲
               </h1>
-              <p className="text-lg text-gray-500 chinese-font-stack">
+              <p className="text-lg text-gray-500">
                 开始你的音乐之旅
               </p>
             </div>
@@ -174,7 +173,7 @@ export const App: React.FC = () => {
               totalLines={currentSong.lyrics.length}
             />
           ) : (
-            <div className="text-center text-gray-400 text-sm py-8 chinese-font-stack">
+            <div className="text-center text-gray-400 text-sm py-8">
               播放歌曲查看歌词
             </div>
           )}
@@ -194,7 +193,7 @@ export const App: React.FC = () => {
             />
           ) : (
             <div className="flex justify-center py-8">
-              <div className="text-gray-500 text-sm chinese-font-stack">
+              <div className="text-gray-500 text-sm">
                 请先添加歌曲到播放列表
               </div>
             </div>
@@ -203,7 +202,7 @@ export const App: React.FC = () => {
 
         {/* 播放列表信息 */}
         {playlist.length > 0 && (
-          <div className="text-xs text-gray-400 text-center chinese-font-stack">
+          <div className="text-xs text-gray-400 text-center">
             播放列表: {playlist.length} 首歌曲
           </div>
         )}
