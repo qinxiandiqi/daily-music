@@ -10,7 +10,9 @@ export function useMusicPlayer() {
     duration: 0,
     volume: 1,
     likedSongs: [],
-    playlist: []
+    playlist: [],
+    repeatMode: 'none',
+    shuffleMode: false
   });
 
   useEffect(() => {
@@ -56,7 +58,7 @@ export function useMusicPlayer() {
 
   const setSong = (song: Song) => {
     if (audioRef.current) {
-      audioRef.current.src = song.audioUrl;
+      audioRef.current.src = song.audioUrl || song.url || '';
       audioRef.current.load();
       setState(prev => ({ 
         ...prev, 
@@ -83,7 +85,7 @@ export function useMusicPlayer() {
     setSong(state.playlist[nextIndex]);
   };
 
-  const deleteSong = (songId: string) => {
+  const deleteSong = (songId: string | number) => {
     const newPlaylist = state.playlist.filter(song => song.id !== songId);
     const newLikedSongs = state.likedSongs.filter(song => song.id !== songId);
     
@@ -104,7 +106,7 @@ export function useMusicPlayer() {
     }
   };
 
-  const toggleLike = (songId: string) => {
+  const toggleLike = (songId: string | number) => {
     const song = state.playlist.find(s => s.id === songId);
     if (!song) return;
 

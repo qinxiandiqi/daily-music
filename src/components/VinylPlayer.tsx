@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface VinylPlayerProps {
-  albumCover: string;
+  albumCover?: string;
   isPlaying: boolean;
   size?: number;
 }

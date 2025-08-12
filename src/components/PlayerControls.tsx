@@ -3,10 +3,10 @@ import React from 'react';
 interface PlayerControlsProps {
   isPlaying: boolean;
   onNext: () => void;
-  onDelete: (songId: string) => void;
-  onLike: (songId: string) => void;
+  onDelete: (songId: string | number) => void;
+  onLike: (songId: string | number) => void;
   onPlayPause: () => void;
-  currentSongId?: string;
+  currentSongId?: string | number;
   isLiked?: boolean;
 }
 

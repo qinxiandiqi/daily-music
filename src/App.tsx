@@ -3,60 +3,19 @@ import { useMusicPlayer } from './hooks/useMusicPlayer';
 import { VinylPlayer } from './components/VinylPlayer';
 import { LyricsDisplay } from './components/LyricsDisplay';
 import { PlayerControls } from './components/PlayerControls';
+import { musicService } from './services/musicService';
 import type { Song } from './types/music';
 
-// 示例歌曲数据
-const sampleSongs: Song[] = [
-  {
-    id: '1',
-    title: '夜的钢琴曲',
-    artist: '石进',
-    coverUrl: 'https://via.placeholder.com/400/6366f1/ffffff?text=Album+1',
-    lyrics: [
-      '夜的钢琴曲五',
-      '安静的夜晚',
-      '只有钢琴的声音',
-      '陪伴着孤独的心',
-      '在黑暗中',
-      '寻找光明',
-      '在音乐中',
-      '找到自己'
-    ],
-    audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'
-  },
-  {
-    id: '2', 
-    title: '梦中的婚礼',
-    artist: '理查德·克莱德曼',
-    coverUrl: 'https://via.placeholder.com/400/ec4899/ffffff?text=Album+2',
-    lyrics: [
-      '梦中的婚礼',
-      '白色的婚纱',
-      '美丽的誓言',
-      '永远的爱恋',
-      '在教堂里',
-      '音乐响起',
-      '幸福的泪水',
-      '流淌在心底'
-    ],
-    audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3'
-  },
-  {
-    id: '3',
-    title: 'River Flows in You',
-    artist: 'Yiruma',
-    coverUrl: 'https://via.placeholder.com/400/10b981/ffffff?text=Album+3',
-    lyrics: [
-      '河流在你心中流淌',
-      '温柔而清澈',
-      '如同思念一般',
-      '永不停息',
-      '穿过山川',
-      '越过海洋',
-      '最终回到你的身边'
-    ],
-    audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3'
-  }
+// 示例歌词数据（用于演示）
+const sampleLyrics: string[] = [
+  '在音乐的海洋里遨游',
+  '感受每个音符的跳动',
+  '让心灵随着旋律飞翔',
+  '找到属于自己的宁静',
+  '音乐是灵魂的语言',
+  '它能治愈所有的伤痛',
+  '在旋律中找到力量',
+  '继续前行不回头'
 ];
 
 export const App: React.FC = () => {
@@ -78,13 +37,57 @@ export const App: React.FC = () => {
 
   // 初始化播放列表
   React.useEffect(() => {
-    sampleSongs.forEach(song => addSongToPlaylist(song));
-    if (sampleSongs.length > 0 && !currentSong) {
-      setSong(sampleSongs[0]);
-    }
+    const loadSongs = async () => {
+      try {
+        const songs = await musicService.getAllSongs();
+        // 转换数据格式以匹配现有组件
+        const convertedSongs = songs.map(song => ({
+          ...song,
+          id: song.id.toString(),
+          coverUrl: song.cover,
+          lyrics: sampleLyrics,
+          audioUrl: song.url
+        }));
+        
+        convertedSongs.forEach(song => addSongToPlaylist(song));
+        if (convertedSongs.length > 0 && !currentSong) {
+          setSong(convertedSongs[0]);
+        }
+      } catch (error) {
+        console.error('Failed to load songs:', error);
+        // 如果加载失败，使用备用数据
+        const fallbackSongs: Song[] = [
+          {
+            id: '1',
+            title: '备用音乐1',
+            artist: '系统默认',
+            album: '默认专辑',
+            duration: '3:00',
+            genre: '音乐',
+            cover: '/images/covers/default.jpg',
+            url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+            description: '备用音乐',
+            playCount: 0,
+            likeCount: 0,
+            tags: ['备用'],
+            uploadDate: new Date().toISOString(),
+            fileSize: '3MB',
+            lyrics: sampleLyrics,
+            audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'
+          }
+        ];
+        
+        fallbackSongs.forEach(song => addSongToPlaylist(song));
+        if (fallbackSongs.length > 0 && !currentSong) {
+          setSong(fallbackSongs[0]);
+        }
+      }
+    };
+    
+    loadSongs();
   }, [addSongToPlaylist, setSong, currentSong]);
 
-  const currentLyricsLine = currentSong?.lyrics.length ? 0 : 0;
+  const currentLyricsLine = currentSong?.lyrics && currentSong.lyrics.length ? 0 : 0;
   const isCurrentSongLiked = currentSong ? likedSongs.some(song => song.id === currentSong.id) : false;
 
   const formatTime = (time: number) => {
@@ -168,9 +171,9 @@ export const App: React.FC = () => {
         <div className="w-full px-4 flex-1 flex items-center justify-center">
           {currentSong ? (
             <LyricsDisplay 
-              lyrics={currentSong.lyrics}
+              lyrics={currentSong.lyrics || []}
               currentLineIndex={currentLyricsLine}
-              totalLines={currentSong.lyrics.length}
+              totalLines={currentSong.lyrics?.length || 0}
             />
           ) : (
             <div className="text-center text-gray-400 text-sm py-8">
@@ -185,8 +188,8 @@ export const App: React.FC = () => {
             <PlayerControls
               isPlaying={isPlaying}
               onNext={nextSong}
-              onDelete={deleteSong}
-              onLike={toggleLike}
+              onDelete={(songId) => deleteSong(songId)}
+              onLike={(songId) => toggleLike(songId)}
               onPlayPause={togglePlayPause}
               currentSongId={currentSong.id}
               isLiked={isCurrentSongLiked}
